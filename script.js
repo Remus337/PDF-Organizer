@@ -31,8 +31,10 @@ addEndBtn.addEventListener('click', () => addBlankPage(null));
 //core functions
 
 async function handleFile(file) {
+    const t = translations[currentLang];
+    
     if (file.type !== 'application/pdf') {
-        alert('Please upload a valid PDF file.');
+        alert(t.alertValid);
         return;
     }
 
@@ -41,7 +43,7 @@ async function handleFile(file) {
 
     try {
         const arrayBuffer = await file.arrayBuffer();
-
+        
         originalPdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
 
         const loadingTask = pdfjsLib.getDocument(arrayBuffer);
@@ -59,7 +61,7 @@ async function handleFile(file) {
 
     } catch (err) {
         console.error(err);
-        alert('Error reading PDF. Check console.');
+        alert(t.alertError);
         resetApp();
     }
 }
@@ -79,6 +81,8 @@ async function renderPageTile(pdf, pageNum) {
 }
 
 function createTileElement(contentNode, originalIndex, isBlank, insertBeforeNode = null) {
+    const t = translations[currentLang];
+
     const wrapper = document.createElement('div');
     wrapper.className = 'tile-wrapper';
     wrapper.dataset.type = isBlank ? 'blank' : 'original';
@@ -87,7 +91,7 @@ function createTileElement(contentNode, originalIndex, isBlank, insertBeforeNode
     const insertBtn = document.createElement('div');
     insertBtn.className = 'insert-before-btn';
     insertBtn.innerHTML = '+';
-    insertBtn.title = "Insert Blank Page Here";
+    insertBtn.title = t.insertTitle;
     
     insertBtn.onmousedown = (e) => e.stopPropagation();
     insertBtn.ontouchstart = (e) => e.stopPropagation();
@@ -129,8 +133,9 @@ function createTileElement(contentNode, originalIndex, isBlank, insertBeforeNode
     updatePageNumbers();
 }
 
-//dynamic updates of page numbers
-function updatePageNumbers() {
+//dynamic updates of page numbers now made global
+window.updatePageNumbers = function() {
+    const t = translations[currentLang];
     const wrappers = document.querySelectorAll('.tile-wrapper');
     
     wrappers.forEach((wrapper, index) => {
@@ -138,18 +143,19 @@ function updatePageNumbers() {
         const currentPos = index + 1;
 
         if (wrapper.dataset.type === 'blank') {
-            label.innerText = `Page ${currentPos} (Blank)`;
+            label.innerText = `${t.page} ${currentPos} (${t.blank})`;
         } else {
             const originalPos = parseInt(wrapper.dataset.originalIndex) + 1;
-            label.innerText = `Page ${currentPos} (Orig: ${originalPos})`;
+            label.innerText = `${t.page} ${currentPos} (${t.orig}: ${originalPos})`;
         }
     });
 }
 
 function addBlankPage(referenceNode) {
+    const t = translations[currentLang];
     const blankVisual = document.createElement('div');
     blankVisual.className = 'blank-placeholder';
-    blankVisual.innerText = '(Blank A4)';
+    blankVisual.innerText = t.blankPlaceholder;
     
     createTileElement(blankVisual, -1, true, referenceNode);
 }

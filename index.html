@@ -15,40 +15,46 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
+    <script src="languages.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
 
     <header>
-        <h1>PDF Organizer</h1>
-        <p class="subtitle">Drag to reorder. Tap + to insert pages.</p>
+        <div class="lang-switcher">
+            <button onclick="setLanguage('en')" class="lang-btn active" id="btn-en">EN</button>
+            <button onclick="setLanguage('pl')" class="lang-btn" id="btn-pl">PL</button>
+        </div>
+
+        <h1 data-lang-key="appTitle">PDF Organizer</h1>
+        <p class="subtitle" data-lang-key="appSubtitle">Drag to reorder. Tap + to insert pages.</p>
     </header>
 
     <main>
         <div id="dropzone">
             <div class="dropzone-content">
                 <div class="icon">📄</div>
-                <h3>Select PDF file</h3>
-                <p>Drag & drop or click to upload</p>
+                <h3 data-lang-key="selectPdf">Select PDF file</h3>
+                <p data-lang-key="dragDrop">Drag & drop or click to upload</p>
                 <input type="file" id="fileInput" accept=".pdf" />
             </div>
         </div>
 
         <div id="loader" class="hidden">
             <div class="spinner"></div>
-            <p>Processing pages...</p>
+            <p data-lang-key="processing">Processing pages...</p>
         </div>
 
         <div id="editor-area" class="hidden">
             <div class="toolbar">
-                <button id="resetBtn" class="btn btn-secondary btn-danger">New PDF</button>
-                <button id="saveBtn" class="btn btn-primary">Save & Download PDF</button>
+                <button id="resetBtn" class="btn btn-secondary btn-danger" data-lang-key="newPdf">New PDF</button>
+                <button id="saveBtn" class="btn btn-primary" data-lang-key="saveDownload">Save & Download PDF</button>
             </div>
 
             <div id="grid-container">
                 <div id="add-end-btn" class="add-end-card" title="Add page at the end">
                     <span>+</span>
-                    <small>Add Page</small>
+                    <small data-lang-key="addPage">Add Page</small>
                 </div>
             </div>
         </div>
